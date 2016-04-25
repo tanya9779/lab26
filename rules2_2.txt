@@ -1,0 +1,25 @@
+// перенос первого символа в конец для алфавита a,b,c,d
+a,q1,B,qa,R
+b,q1,B,qb,R
+c,q1,B,qc,R
+d,q1,B,qd,R
+a,qa,a,qa,R
+b,qa,b,qa,R
+c,qa,c,qa,R
+d,qa,d,qa,R
+a,qb,a,qb,R
+b,qb,b,qb,R
+c,qb,c,qb,R
+d,qb,d,qb,R
+a,qc,a,qc,R
+b,qc,b,qc,R
+c,qc,c,qc,R
+d,qc,d,qc,R
+a,qd,a,qd,R
+b,qd,b,qd,R
+c,qd,c,qd,R
+d,qd,d,qd,R
+B,qa,a,STOP,R
+B,qb,b,STOP,R
+B,qc,c,STOP,R
+B,qd,d,STOP,R
