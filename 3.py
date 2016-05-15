@@ -21,37 +21,37 @@ def draw_background(scr, img=None):
 
 
 #-----------------------------------------------
-# класс Карта хранит все ячейки
-# загружать карту из файла. Легенда: 1-живая клетка 0-мертвая
-# Класс будет рисовать
-# M[0..1][x][y] - два поля. Они поочередно становятся текущим и прошлым состоянием
-# current_layer указывает текущее поле
-# x_max, y_max размеры поля
-# МОДЕЛЬ ТОРА - левая и правая границы склеены, верхняя и нижняя тоже
+# РєР»Р°СЃСЃ РљР°СЂС‚Р° С…СЂР°РЅРёС‚ РІСЃРµ СЏС‡РµР№РєРё
+# Р·Р°РіСЂСѓР¶Р°С‚СЊ РєР°СЂС‚Сѓ РёР· С„Р°Р№Р»Р°. Р›РµРіРµРЅРґР°: 1-Р¶РёРІР°СЏ РєР»РµС‚РєР° 0-РјРµСЂС‚РІР°СЏ
+# РљР»Р°СЃСЃ Р±СѓРґРµС‚ СЂРёСЃРѕРІР°С‚СЊ
+# M[0..1][x][y] - РґРІР° РїРѕР»СЏ. РћРЅРё РїРѕРѕС‡РµСЂРµРґРЅРѕ СЃС‚Р°РЅРѕРІСЏС‚СЃСЏ С‚РµРєСѓС‰РёРј Рё РїСЂРѕС€Р»С‹Рј СЃРѕСЃС‚РѕСЏРЅРёРµРј
+# current_layer СѓРєР°Р·С‹РІР°РµС‚ С‚РµРєСѓС‰РµРµ РїРѕР»Рµ
+# x_max, y_max СЂР°Р·РјРµСЂС‹ РїРѕР»СЏ
+# РњРћР”Р•Р›Р¬ РўРћР Рђ - Р»РµРІР°СЏ Рё РїСЂР°РІР°СЏ РіСЂР°РЅРёС†С‹ СЃРєР»РµРµРЅС‹, РІРµСЂС…РЅСЏСЏ Рё РЅРёР¶РЅСЏСЏ С‚РѕР¶Рµ
 
 
 class Map:
     def __init__(self, f_name, cell_width):
 
         self.cell_width = cell_width
-        self.current_layer = 0 # текущий слой
-        self.cell_changed = 0 # сколько ячеек изменилось
-        # загрузим карту из файла
+        self.current_layer = 0 # С‚РµРєСѓС‰РёР№ СЃР»РѕР№
+        self.cell_changed = 0 # СЃРєРѕР»СЊРєРѕ СЏС‡РµРµРє РёР·РјРµРЅРёР»РѕСЃСЊ
+        # Р·Р°РіСЂСѓР·РёРј РєР°СЂС‚Сѓ РёР· С„Р°Р№Р»Р°
         in_f=open(f_name,'r')
         s=in_f.readline().rstrip()
         (w,h) = map(int, s.split(','))
-        self.M = [0,0] # два слоя
-        self.M[0] = [ [0]*h for i in range(w) ] # первый слой хранит предыдущее состояние
-        self.M[1] = [ [0]*h for i in range(w) ] # второй текущее состояние - потом они меняются
+        self.M = [0,0] # РґРІР° СЃР»РѕСЏ
+        self.M[0] = [ [0]*h for i in range(w) ] # РїРµСЂРІС‹Р№ СЃР»РѕР№ С…СЂР°РЅРёС‚ РїСЂРµРґС‹РґСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
+        self.M[1] = [ [0]*h for i in range(w) ] # РІС‚РѕСЂРѕР№ С‚РµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ - РїРѕС‚РѕРј РѕРЅРё РјРµРЅСЏСЋС‚СЃСЏ
 
         s=in_f.readline()
         i=0
         while len(s)>0:
             for j in range(len(s)):
-                if s[j]=='1': # живая
+                if s[j]=='1': # Р¶РёРІР°СЏ
                     self.M[self.current_layer][j][i] = 1
 
-            # читаем след строку из файла
+            # С‡РёС‚Р°РµРј СЃР»РµРґ СЃС‚СЂРѕРєСѓ РёР· С„Р°Р№Р»Р°
             s=in_f.readline()
             i+=1
         in_f.close()
@@ -60,7 +60,7 @@ class Map:
         return self.cell_changed
 
 
-    # пересчет всего состояния
+    # РїРµСЂРµСЃС‡РµС‚ РІСЃРµРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ
     def recalc(self):
         self.current_layer = (self.current_layer+1)%2
         self.cell_changed = 0
@@ -68,8 +68,8 @@ class Map:
             for j in range(len(self.M[self.current_layer][i])):
                 self.cell_calculate(i,j)
 
-    # расчет одной ячейки в текущем слое
-    # помним, что модель Тора
+    # СЂР°СЃС‡РµС‚ РѕРґРЅРѕР№ СЏС‡РµР№РєРё РІ С‚РµРєСѓС‰РµРј СЃР»РѕРµ
+    # РїРѕРјРЅРёРј, С‡С‚Рѕ РјРѕРґРµР»СЊ РўРѕСЂР°
     def cell_calculate(self, x, y):
         prev = (self.current_layer+1)%2
         x_max = len(self.M[self.current_layer])
@@ -77,28 +77,28 @@ class Map:
         cnt = self.M[prev][x-1][y-1] + self.M[prev][x-1][y] + self.M[prev][x-1][(y+1)%y_max] + \
               self.M[prev][x][y-1] + self.M[prev][x][(y+1)%y_max] + \
               self.M[prev][(x+1)%x_max][y-1] + self.M[prev][(x+1)%x_max][y] + self.M[prev][(x+1)%x_max][(y+1)%y_max]
-        if self.M[prev][x][y]: # живая клетка
-            if 2<= cnt <= 3: # остается жить
+        if self.M[prev][x][y]: # Р¶РёРІР°СЏ РєР»РµС‚РєР°
+            if 2<= cnt <= 3: # РѕСЃС‚Р°РµС‚СЃСЏ Р¶РёС‚СЊ
                 self.M[self.current_layer][x][y] = 1
             else:
                 self.M[self.current_layer][x][y] = 0
                 self.cell_changed += 1
-        else: # мертвая клетка
-            if cnt == 3: # сможет ожить
+        else: # РјРµСЂС‚РІР°СЏ РєР»РµС‚РєР°
+            if cnt == 3: # СЃРјРѕР¶РµС‚ РѕР¶РёС‚СЊ
                 self.M[self.current_layer][x][y] = 1
                 self.cell_changed += 1
-            else: # не оживет
+            else: # РЅРµ РѕР¶РёРІРµС‚
                 self.M[self.current_layer][x][y] = 0
     
     
-    # рисование карты
+    # СЂРёСЃРѕРІР°РЅРёРµ РєР°СЂС‚С‹
     def draw(self, scr):
         for i in range(len(self.M[self.current_layer])):
             for j in range(len(self.M[self.current_layer][i])):
                 live=self.M[self.current_layer][i][j]
-                if live: # FIXME нарисуем шарик
+                if live: # FIXME РЅР°СЂРёСЃСѓРµРј С€Р°СЂРёРє
                     pygame.draw.circle(scr, RED, [self.cell_width*i+self.cell_width//2,self.cell_width*j+self.cell_width//2], self.cell_width//2)
-#                else: # ничего не нужно
+#                else: # РЅРёС‡РµРіРѕ РЅРµ РЅСѓР¶РЅРѕ
 #                    pygame.draw.circle(scr, BLUE, [self.cell_width*i+self.cell_width//2,self.cell_width*j+self.cell_width//2], self.cell_width//2)
 
 #-----------------------------------------------
@@ -109,7 +109,7 @@ def process_events(events):
 #-----------------------------------------------
 
 def message_box(screen, message):
-    # вывод вообщения в окошке по центру
+    # РІС‹РІРѕРґ РІРѕРѕР±С‰РµРЅРёСЏ РІ РѕРєРѕС€РєРµ РїРѕ С†РµРЅС‚СЂСѓ
     fontobject = pygame.font.Font(None,18)
     pygame.draw.rect(screen, (0,255,0),
                    ((screen.get_width()/2) - 200,
@@ -134,25 +134,25 @@ if __name__ == '__main__':
     f_name = sys.argv[1]
 
     init_window()
-    cell_size = 10 # сколько пикселей занимает одна клетка
-    RED = (255,0,0) # красный цвет
-    BLUE = (0,0,255) # синий
-    map = Map(f_name, cell_size) # класс Map загрузит нач состояние из файла f_name
+    cell_size = 10 # СЃРєРѕР»СЊРєРѕ РїРёРєСЃРµР»РµР№ Р·Р°РЅРёРјР°РµС‚ РѕРґРЅР° РєР»РµС‚РєР°
+    RED = (255,0,0) # РєСЂР°СЃРЅС‹Р№ С†РІРµС‚
+    BLUE = (0,0,255) # СЃРёРЅРёР№
+    map = Map(f_name, cell_size) # РєР»Р°СЃСЃ Map Р·Р°РіСЂСѓР·РёС‚ РЅР°С‡ СЃРѕСЃС‚РѕСЏРЅРёРµ РёР· С„Р°Р№Р»Р° f_name
 
     background = None #pygame.image.load("./resources/background.png")
     screen = pygame.display.get_surface()
     map.draw(screen)
 
 
-    while 1: # здесь основной цикл
+    while 1: # Р·РґРµСЃСЊ РѕСЃРЅРѕРІРЅРѕР№ С†РёРєР»
         process_events(pygame.event.get())
         pygame.time.delay(100)
         draw_background(screen, background)
-        map.recalc() # пересчитаем все клетки
-        map.draw(screen) # и выведем на экран
+        map.recalc() # РїРµСЂРµСЃС‡РёС‚Р°РµРј РІСЃРµ РєР»РµС‚РєРё
+        map.draw(screen) # Рё РІС‹РІРµРґРµРј РЅР° СЌРєСЂР°РЅ
         pygame.display.update()
 
-#        if not map.is_changed(): # игра замерла
+#        if not map.is_changed(): # РёРіСЂР° Р·Р°РјРµСЂР»Р°
 #            message_box(screen,'NO CHANGES!!!')
 #            pygame.time.delay(3000)
 #            break
