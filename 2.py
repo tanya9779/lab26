@@ -37,11 +37,12 @@ else:
     while _state != 'STOP':
         _in = tape[_pointer]
         if _state not in rules[_in]: # недопустимое состояние - завершим цикл
+#            print('!!!',_state)
             _state = 'STOP'
         else:
             (_out, _new_state, _dir) = rules[_in][_state]
+            tape[_pointer] = _out
             if _new_state != 'STOP':
-                tape[_pointer] = _out
                 if _dir == 'R':
                     _pointer += 1
                     if _pointer>=len(tape):
